@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>118 Attendance — Portal</title>
+<style>
+  :root {
+    --ink: #1c2321;
+    --paper: #f6f5f1;
+    --line: #d8d5cc;
+    --accent: #2f5d50;
+    --accent-soft: #e4ede9;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Georgia", "Iowan Old Style", serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 64px 24px;
+  }
+
+  header {
+    max-width: 560px;
+    text-align: left;
+    margin-bottom: 48px;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2.1rem;
+    font-weight: 500;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+
+  header p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #5a5f5c;
+    font-size: 0.98rem;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  nav {
+    width: 100%;
+    max-width: 560px;
+    border-top: 1px solid var(--line);
+  }
+
+  .link-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    color: var(--ink);
+    padding: 26px 4px;
+    border-bottom: 1px solid var(--line);
+    transition: padding-left 0.15s ease;
+  }
+
+  .link-row:hover {
+    padding-left: 12px;
+    background: var(--accent-soft);
+  }
+
+  .link-main {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .link-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  .link-desc {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.88rem;
+    color: #6b706c;
+  }
+
+  .arrow {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-left: 16px;
+  }
+
+  footer {
+    max-width: 560px;
+    width: 100%;
+    margin-top: 40px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    color: #9a9d97;
+  }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 1.7rem; }
+    .link-title { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>118 Attendance</h1>
+    <p>Pick where you need to go — attendance, HR, or the manager dashboard.</p>
+  </header>
+
+  <nav>
+    <a class="link-row" href="attendance.html">
+      <span class="link-main">
+        <span class="link-title">Attendance</span>
+        <span class="link-desc">Log in or out with the QR attendance form</span>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="link-row" href="hr.html">
+      <span class="link-main">
+        <span class="link-title">HR</span>
+        <span class="link-desc">HR dashboard — records, leave, and reports</span>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="link-row" href="manager.html">
+      <span class="link-main">
+        <span class="link-title">Manager</span>
+        <span class="link-desc">Team attendance, approvals, and CSV export</span>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+  </nav>
+
+  <footer>
+    118 Employee Attendance Portal
+  </footer>
+
+</body>
+</html>
