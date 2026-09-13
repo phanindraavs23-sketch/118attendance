@@ -1,20 +1,24 @@
-118 Employee QR Attendance - GitHub Pages + Supabase
-
-No HR or Manager dashboard. One public attendance web URL.
+# 118 Attendance - Editable QR Attendance
 
 GitHub Pages URL:
-https://phanindraavs23-sketch.github.io/attendance/
+https://phanindraavs23-sketch.github.io/118attendance/
 
-The page displays a company QR code. Scanning it opens the same attendance page.
-Employees select Name, verify Employee ID, enter Location, then choose Login or Logout.
+Features:
+- QR code opens the attendance page
+- Employee Name is editable
+- Employee ID is editable
+- Location is editable
+- Login and Logout buttons
+- No HR dashboard
+- No Manager dashboard
+- Saves records to Supabase table `qr_attendance`
 
 Setup:
-1. Upload all files in this folder to the root of GitHub repository phanindraavs23-sketch/attendance.
-2. Enable GitHub Pages: Settings > Pages > Deploy from a branch > main > /(root).
-3. In Supabase SQL Editor run supabase/schema.sql.
-4. Ensure config.js contains your Supabase Project URL and publishable key.
+1. In Supabase SQL Editor, run `supabase/schema.sql`.
+2. Upload all files in this ZIP to the ROOT of the `118attendance` GitHub repository.
+3. GitHub -> Settings -> Pages -> Deploy from branch -> main -> / (root).
+4. Open:
+   https://phanindraavs23-sketch.github.io/118attendance/
 
-Data recorded:
-Employee ID, Employee Name, Location, Action (LOGIN/LOGOUT), Date/Time.
-
-Security note: because this version has no HR/Manager authentication, anyone with the URL can submit attendance for any listed employee. For controlled attendance, use the role-based version instead.
+Important:
+Because Name and Employee ID are editable, this public page does not verify that the person entering the details is the employee. If you want, a PIN/OTP or employee-selection validation can be added later.
