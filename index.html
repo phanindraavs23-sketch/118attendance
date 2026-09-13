@@ -1,140 +1,152 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>118 Employee Attendance</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>118 Attendance — Portal</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f4f6f8;margin:0;color:#111}
-.wrap{max-width:620px;margin:25px auto;padding:16px}
-.card{background:#fff;padding:26px;border-radius:18px;box-shadow:0 4px 20px #0001}
-.qrbox{text-align:center;background:#f8f9fa;border:1px solid #ddd;border-radius:12px;padding:18px;margin:18px 0}
-.qrbox img{width:240px;height:240px;display:block;margin:10px auto}
-.muted{color:#555;line-height:1.5}
-.label{display:block;margin-top:14px;font-weight:bold}
-.field,button{width:100%;box-sizing:border-box;padding:14px;margin-top:7px;font-size:18px;border-radius:10px}
-.field{border:1px solid #aaa;background:#fff}
-button{border:0;background:#111;color:#fff;cursor:pointer;margin-top:12px}
-button:disabled{opacity:.55;cursor:not-allowed}
-.logout{background:#555}
-.ok{background:#e8f7ed;padding:15px;border-radius:10px;margin-top:15px}
-.error{background:#fdecec;color:#b42318;padding:15px;border-radius:10px;margin-top:15px}
-.small{font-size:13px;color:#666}
-.hint{font-size:14px;color:#555;margin-top:5px}
+  :root {
+    --ink: #1c2321;
+    --paper: #f6f5f1;
+    --line: #d8d5cc;
+    --accent: #2f5d50;
+    --accent-soft: #e4ede9;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Georgia", "Iowan Old Style", serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 64px 24px;
+  }
+
+  header {
+    max-width: 560px;
+    text-align: left;
+    margin-bottom: 48px;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2.1rem;
+    font-weight: 500;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+
+  header p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #5a5f5c;
+    font-size: 0.98rem;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  nav {
+    width: 100%;
+    max-width: 560px;
+    border-top: 1px solid var(--line);
+  }
+
+  .link-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    color: var(--ink);
+    padding: 26px 4px;
+    border-bottom: 1px solid var(--line);
+    transition: padding-left 0.15s ease;
+  }
+
+  .link-row:hover {
+    padding-left: 12px;
+    background: var(--accent-soft);
+  }
+
+  .link-main {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .link-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  .link-desc {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.88rem;
+    color: #6b706c;
+  }
+
+  .arrow {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-left: 16px;
+  }
+
+  footer {
+    max-width: 560px;
+    width: 100%;
+    margin-top: 40px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    color: #9a9d97;
+  }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 1.7rem; }
+    .link-title { font-size: 1.1rem; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap"><div class="card">
-<h1>Employee Attendance</h1>
-<p class="muted">Scan the QR code to open this form. Enter or verify your Name, Employee ID and Location, then choose Login or Logout.</p>
 
-<div class="qrbox">
-<h2>Company Attendance QR</h2>
-<div id="qrcode"></div>
-<p class="small">Scan this QR code with your phone to open the attendance form.</p>
-</div>
+  <header>
+    <h1>118 Attendance</h1>
+    <p>Pick where you need to go — attendance, HR, or the manager dashboard.</p>
+  </header>
 
-<label class="label" for="employeeName">Employee Name</label>
-<input class="field" id="employeeName" placeholder="Enter Registered Employee Name" autocomplete="name">
+  <nav>
+    <a class="link-row" href="attendance.html">
+      <span class="link-main">
+        <span class="link-title">Attendance</span>
+        <span class="link-desc">Log in or out with the QR attendance form</span>
+      </span>
+      <span class="arrow">→</span>
+    </a>
 
-<label class="label" for="employeeId">Employee ID</label>
-<input class="field" id="employeeId" placeholder="Enter Employee ID" autocomplete="off">
+    <a class="link-row" href="hr.html">
+      <span class="link-main">
+        <span class="link-title">HR</span>
+        <span class="link-desc">HR dashboard — records, leave, and reports</span>
+      </span>
+      <span class="arrow">→</span>
+    </a>
 
-<label class="label" for="employeeLocation">Location</label>
-<input class="field" id="employeeLocation" placeholder="Enter Location" autocomplete="off">
+    <a class="link-row" href="manager.html">
+      <span class="link-main">
+        <span class="link-title">Manager</span>
+        <span class="link-desc">Team attendance, approvals, and CSV export</span>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+  </nav>
 
-<button id="loginBtn" onclick="mark('LOGIN')">Login</button>
-<button id="logoutBtn" class="logout" onclick="mark('LOGOUT')">Logout</button>
-<div id="msg"></div>
-</div></div>
+  <footer>
+    118 Employee Attendance Portal
+  </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="config.js"></script>
-<script src="qr_daily.js"></script>
-<script>
-const sb = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
-const nameInput = document.getElementById('employeeName');
-const idInput = document.getElementById('employeeId');
-const locationInput = document.getElementById('employeeLocation');
-const msg = document.getElementById('msg');
-
-const params = new URLSearchParams(window.location.search);
-const qrName = params.get('name') || '';
-const qrEmployeeId = params.get('employeeId') || params.get('employee_id') || '';
-const qrLocation = params.get('location') || '';
-const scannedDate = params.get('d');
-const scannedToken = params.get('t');
-
-if (qrName) nameInput.value = qrName;
-if (qrEmployeeId) idInput.value = qrEmployeeId;
-if (qrLocation) locationInput.value = qrLocation;
-
-// If this page was opened via a QR code carrying a d/t pair, make sure it's
-// today's QR and not an old, expired one (see qr_daily.js).
-let qrExpired = false;
-if (scannedDate || scannedToken) {
-  qrExpired = !window.QRDaily.isTodayToken(scannedDate, scannedToken);
-}
-if (qrExpired) {
-  msg.innerHTML = '<div class="error">This QR code has expired. Please scan today\'s Company Attendance QR code and try again.</div>';
-  setBusy(true);
-}
-
-const qrTarget = new URL('attendance.html', window.location.href).href;
-function renderQr() {
-  const qrEl = document.getElementById('qrcode');
-  qrEl.innerHTML = '';
-  new QRCode(qrEl, {
-    text: window.QRDaily.buildDailyQrUrl(qrTarget),
-    width: 240, height: 240, correctLevel: QRCode.CorrectLevel.M
-  });
-}
-window.QRDaily.scheduleDailyRefresh(renderQr);
-
-async function mark(action) {
-  if (qrExpired) return fail('This QR code has expired. Please scan today\'s Company Attendance QR code and try again.');
-  const employeeName = nameInput.value.trim();
-  const employeeId = idInput.value.trim();
-  const employeeLocation = locationInput.value.trim();
-
-  if (!employeeName) return fail('Please enter your employee name.');
-  if (!employeeId) return fail('Please enter your Employee ID.');
-  if (!employeeLocation) return fail('Please enter your location.');
-
-  setBusy(true);
-  msg.innerHTML = '';
-
-  // recorded_at is generated by Supabase/PostgreSQL (server time).
-  const { error } = await sb.from('attendance').insert({
-    employee_id: employeeId,
-    employee_name: employeeName,
-    location: employeeLocation,
-    action: action
-  });
-
-  setBusy(false);
-  if (error) return fail(error.message);
-
-  msg.innerHTML = '<div class="ok"><b>' + esc(employeeName) + '</b><br>' +
-    'Employee ID: <b>' + esc(employeeId) + '</b><br>' +
-    'Location: <b>' + esc(employeeLocation) + '</b><br>' +
-    'Attendance <b>' + action + '</b> recorded successfully.<br>' +
-    '<span class="small">Date/time is saved automatically by the Supabase server.</span></div>';
-}
-
-function setBusy(busy) {
-  document.getElementById('loginBtn').disabled = busy;
-  document.getElementById('logoutBtn').disabled = busy;
-}
-function fail(x) {
-  msg.innerHTML = '<div class="error">' + esc(x) + '</div>';
-}
-function esc(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
-}
-</script>
 </body>
 </html>
