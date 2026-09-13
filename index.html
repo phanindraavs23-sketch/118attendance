@@ -35,13 +35,13 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </div>
 
 <label class="label" for="employeeName">Employee Name</label>
-<input class="field" id="employeeName" placeholder="Enter Registered Employee Name" autocomplete="name">
+<input class="field" id="employeeName" placeholder="Enter employee name" autocomplete="name">
 
 <label class="label" for="employeeId">Employee ID</label>
 <input class="field" id="employeeId" placeholder="Enter Employee ID" autocomplete="off">
 
 <label class="label" for="employeeLocation">Location</label>
-<input class="field" id="employeeLocation" placeholder="Enter location" autocomplete="off">
+<input class="field" id="employeeLocation" placeholder="Enter location (e.g. Office / Home)" autocomplete="off">
 
 <button id="loginBtn" onclick="mark('LOGIN')">Login</button>
 <button id="logoutBtn" class="logout" onclick="mark('LOGOUT')">Logout</button>
@@ -51,6 +51,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="config.js"></script>
+<script src="qr_daily.js"></script>
 <script>
 const sb = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
 const nameInput = document.getElementById('employeeName');
@@ -62,17 +63,37 @@ const params = new URLSearchParams(window.location.search);
 const qrName = params.get('name') || '';
 const qrEmployeeId = params.get('employeeId') || params.get('employee_id') || '';
 const qrLocation = params.get('location') || '';
+const scannedDate = params.get('d');
+const scannedToken = params.get('t');
 
 if (qrName) nameInput.value = qrName;
 if (qrEmployeeId) idInput.value = qrEmployeeId;
 if (qrLocation) locationInput.value = qrLocation;
 
-const qrUrl = new URL('attendance.html', window.location.href).href;
-new QRCode(document.getElementById('qrcode'), {
-  text: qrUrl, width: 240, height: 240, correctLevel: QRCode.CorrectLevel.M
-});
+// If this page was opened via a QR code carrying a d/t pair, make sure it's
+// today's QR and not an old, expired one (see qr_daily.js).
+let qrExpired = false;
+if (scannedDate || scannedToken) {
+  qrExpired = !window.QRDaily.isTodayToken(scannedDate, scannedToken);
+}
+if (qrExpired) {
+  msg.innerHTML = '<div class="error">This QR code has expired. Please scan today\'s Company Attendance QR code and try again.</div>';
+  setBusy(true);
+}
+
+const qrTarget = new URL('attendance.html', window.location.href).href;
+function renderQr() {
+  const qrEl = document.getElementById('qrcode');
+  qrEl.innerHTML = '';
+  new QRCode(qrEl, {
+    text: window.QRDaily.buildDailyQrUrl(qrTarget),
+    width: 240, height: 240, correctLevel: QRCode.CorrectLevel.M
+  });
+}
+window.QRDaily.scheduleDailyRefresh(renderQr);
 
 async function mark(action) {
+  if (qrExpired) return fail('This QR code has expired. Please scan today\'s Company Attendance QR code and try again.');
   const employeeName = nameInput.value.trim();
   const employeeId = idInput.value.trim();
   const employeeLocation = locationInput.value.trim();
