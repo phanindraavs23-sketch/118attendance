@@ -230,7 +230,12 @@ function renderAttendanceCalendar() {
   const startDay = first.getDay();
   const days = last.getDate();
   const leaves = new Set(window.ATTENDANCE_LEAVES || []);
-  const holidays = new Set(window.ATTENDANCE_PUBLIC_HOLIDAYS || []);
+  const holidayNames = new Map();
+  (window.ATTENDANCE_PUBLIC_HOLIDAYS || []).forEach(item => {
+    if (typeof item === 'string') holidayNames.set(item, '');
+    else if (item && item.date) holidayNames.set(item.date, item.name || '');
+  });
+  const holidays = new Set(holidayNames.keys());
 
   let html = '<div class="calendar-head">' +
     '<div class="calendar-title">' +
@@ -238,7 +243,7 @@ function renderAttendanceCalendar() {
     '</div>' +
     '<div class="calendar-legend">' +
       '<span class="legend-item"><span class="legend-dot leave-dot"></span>Leave</span>' +
-      '<span class="legend-item"><span class="legend-dot holiday-dot"></span>Public Holiday</span>' +
+      '<span class="legend-item"><span class="legend-dot holiday-dot"></span>Festival / Public Holiday</span>' +
     '</div>' +
   '</div><div class="cal-grid">';
 
@@ -258,10 +263,11 @@ function renderAttendanceCalendar() {
     if (isLeave) cls += ' leave';
     if (isHoliday) cls += ' holiday';
 
+    const festivalName = holidayNames.get(key) || '';
     let label = '';
-    if (isLeave && isHoliday) label = 'Leave / Holiday';
+    if (isLeave && isHoliday) label = 'Leave / ' + (festivalName || 'Holiday');
     else if (isLeave) label = 'Leave';
-    else if (isHoliday) label = 'Public Holiday';
+    else if (isHoliday) label = festivalName || 'Public Holiday';
 
     html += '<div class="' + cls + '"><strong>' + day + '</strong>' +
       (label ? '<span class="cal-label">' + label + '</span>' : '') +
