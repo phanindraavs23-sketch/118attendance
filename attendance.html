@@ -93,7 +93,12 @@ async function mark(action) {
   });
 
   setBusy(false);
-  if (error) return fail(error.message);
+  if (error) {
+    if ((error.message || '').toLowerCase().includes('session_token')) {
+      return fail('Supabase still requires the old session_token column. Run supabase/fix_session_token.sql in Supabase SQL Editor, then try again.');
+    }
+    return fail(error.message);
+  }
 
   msg.innerHTML = '<div class="ok"><b>' + esc(employeeName) + '</b><br>' +
     'Employee ID: <b>' + esc(employeeId) + '</b><br>' +
