@@ -12,12 +12,32 @@ h1{margin-top:0} .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px
 .stat{padding:18px;border:1px solid #ddd;border-radius:12px} .num{font-size:30px;font-weight:bold;margin-top:5px}
 .controls{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px}
 input,select,button{box-sizing:border-box;padding:11px;border:1px solid #aaa;border-radius:9px;font-size:15px}
-button{background:#111;color:#fff;border:0;cursor:pointer} button.secondary{background:#666}
+button{background:#111;color:#fff;border:0;cursor:pointer} button.secondary{background:#666} .exportBtn{background:#087f5b;font-weight:700}
 table{width:100%;border-collapse:collapse;margin-top:14px} th,td{padding:11px;border-bottom:1px solid #ddd;text-align:left} th{background:#f7f7f7}
 .login{max-width:420px;margin:70px auto} .error{color:#b42318;background:#fdecec;padding:10px;border-radius:8px;margin-top:12px}
 .badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#eee;font-size:12px}
 .loginb{background:#e8f7ed} .logoutb{background:#eee} .small{color:#666;font-size:13px}
 @media(max-width:800px){.grid,.controls{grid-template-columns:1fr 1fr}table{font-size:13px;display:block;overflow:auto;white-space:nowrap}}
+
+.calendar-card{margin-top:18px}
+.calendar-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.calendar-title{font-size:20px;font-weight:700}
+.calendar-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px}
+.legend-item{display:flex;align-items:center;gap:6px}
+.legend-dot{width:12px;height:12px;border-radius:3px;border:1px solid #bbb}
+.leave-dot{background:#ffd6d6;border-color:#d33}
+.holiday-dot{background:#d8f5df;border-color:#198754}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid #ddd;border-radius:10px;overflow:hidden}
+.cal-dow,.cal-day{padding:9px;border-right:1px solid #eee;border-bottom:1px solid #eee;min-height:52px}
+.cal-dow{min-height:auto;background:#f7f7f7;font-weight:700;text-align:center}
+.cal-day{background:#fff;position:relative}
+.cal-day:nth-child(7n){border-right:0}
+.cal-day.muted{background:#fafafa;color:#aaa}
+.cal-day.leave{background:#ffd6d6;color:#9b1c1c;font-weight:700}
+.cal-day.holiday{background:#d8f5df;color:#146c2e;font-weight:700}
+.cal-day.leave.holiday{background:linear-gradient(135deg,#ffd6d6 50%,#d8f5df 50%)}
+.cal-label{display:block;font-size:11px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:800px){.cal-dow,.cal-day{padding:7px;min-height:45px;font-size:12px}}
 </style>
 </head>
 <body>
@@ -45,13 +65,14 @@ table{width:100%;border-collapse:collapse;margin-top:14px} th,td{padding:11px;bo
 <div class="stat">Logouts<div id="logouts" class="num">0</div></div>
 <div class="stat">Employees today<div id="employees" class="num">0</div></div>
 </div>
+<div class="card calendar-card"><div id="attendanceCalendar"></div></div>
 <div class="card">
 <div class="controls">
 <input id="search" placeholder="Search name / employee ID / location">
 <select id="action"><option value="">All actions</option><option value="LOGIN">LOGIN</option><option value="LOGOUT">LOGOUT</option></select>
 <input id="from" type="date" title="From date">
 <input id="to" type="date" title="To date">
-<button onclick="loadData()">Refresh</button><button onclick="exportCSV()">Export CSV</button>
+<button class="exportBtn" onclick="exportCSV()">Export CSV</button><button onclick="loadData()">Refresh</button>
 </div>
 <div id="tableMsg" class="small" style="margin-top:12px"></div>
 <table>
@@ -62,7 +83,7 @@ table{width:100%;border-collapse:collapse;margin-top:14px} th,td{padding:11px;bo
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
+<script src="config.js"></script><script src="calendar_config.js"></script>
 <script>
 const sb = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
 let allRows = [];
@@ -196,6 +217,65 @@ function exportCSV() {
   URL.revokeObjectURL(url);
 }
 
+
+function renderAttendanceCalendar() {
+  const root = document.getElementById('attendanceCalendar');
+  if (!root) return;
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const first = new Date(year, month, 1);
+  const last = new Date(year, month + 1, 0);
+  const startDay = first.getDay();
+  const days = last.getDate();
+  const leaves = new Set(window.ATTENDANCE_LEAVES || []);
+  const holidays = new Set(window.ATTENDANCE_PUBLIC_HOLIDAYS || []);
+
+  let html = '<div class="calendar-head">' +
+    '<div class="calendar-title">' +
+      now.toLocaleString('en-IN', {month:'long', year:'numeric'}) +
+    '</div>' +
+    '<div class="calendar-legend">' +
+      '<span class="legend-item"><span class="legend-dot leave-dot"></span>Leave</span>' +
+      '<span class="legend-item"><span class="legend-dot holiday-dot"></span>Public Holiday</span>' +
+    '</div>' +
+  '</div><div class="cal-grid">';
+
+  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
+    html += '<div class="cal-dow">' + d + '</div>';
+  });
+
+  for (let i=0; i<startDay; i++) html += '<div class="cal-day muted"></div>';
+
+  for (let day=1; day<=days; day++) {
+    const mm = String(month+1).padStart(2,'0');
+    const dd = String(day).padStart(2,'0');
+    const key = year + '-' + mm + '-' + dd;
+    const isLeave = leaves.has(key);
+    const isHoliday = holidays.has(key);
+    let cls = 'cal-day';
+    if (isLeave) cls += ' leave';
+    if (isHoliday) cls += ' holiday';
+
+    let label = '';
+    if (isLeave && isHoliday) label = 'Leave / Holiday';
+    else if (isLeave) label = 'Leave';
+    else if (isHoliday) label = 'Public Holiday';
+
+    html += '<div class="' + cls + '"><strong>' + day + '</strong>' +
+      (label ? '<span class="cal-label">' + label + '</span>' : '') +
+      '</div>';
+  }
+
+  const total = startDay + days;
+  const trailing = (7 - (total % 7)) % 7;
+  for (let i=0; i<trailing; i++) html += '<div class="cal-day muted"></div>';
+
+  html += '</div>';
+  root.innerHTML = html;
+}
+
 function formatTime(value) {
   if (!value) return '';
   return new Date(value).toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'medium'});
@@ -205,6 +285,7 @@ function esc(value) {
 }
 ['search','action','from','to'].forEach(id => document.getElementById(id).addEventListener('input', render));
 sb.auth.getSession().then(({data}) => { if (data.session) start(); });
+renderAttendanceCalendar();
 </script>
 </body>
 </html>
