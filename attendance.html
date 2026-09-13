@@ -1,21 +1,90 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>118 Employee Attendance</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>118 Attendance</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-body{font-family:Arial,sans-serif;background:#f4f6f8;margin:0;color:#111}.wrap{max-width:620px;margin:25px auto;padding:16px}.card{background:#fff;padding:26px;border-radius:18px;box-shadow:0 4px 20px #0001}.qrbox{text-align:center;background:#f8f9fa;border:1px solid #ddd;border-radius:12px;padding:18px;margin:18px 0}.qrbox img{width:240px;height:240px;display:block;margin:10px auto}.muted{color:#555;line-height:1.5}.label{display:block;margin-top:14px;font-weight:bold}.field,select,button{width:100%;box-sizing:border-box;padding:14px;margin-top:7px;font-size:18px;border-radius:10px}select,.field{border:1px solid #aaa;background:#fff}.field[readonly]{background:#f1f3f5}button{border:0;background:#111;color:#fff;cursor:pointer;margin-top:12px}.ok{background:#e8f7ed;padding:15px;border-radius:10px;margin-top:15px}.error{background:#fdecec;color:#b42318;padding:15px;border-radius:10px;margin-top:15px}.small{font-size:13px;color:#666}
-</style></head><body><div class="wrap"><div class="card">
-<h1>Employee Attendance</h1><p class="muted">Scan the QR code or open this page. Select your name, verify your Employee ID, enter your location, then choose Login or Logout.</p>
-<div class="qrbox"><h2>Company Attendance QR</h2><div id="qrcode"></div><p class="small">Scan this QR code with your phone to open the attendance form.</p></div>
-<label class="label" for="person">Employee Name</label><select id="person" onchange="updateId()"><option value="">Loading employees...</option></select>
-<label class="label" for="employeeId">Employee ID</label><input class="field" id="employeeId" readonly placeholder="Employee ID">
-<label class="label" for="location">Location</label><input class="field" id="location" placeholder="Enter location (e.g. Office / Home)" autocomplete="off">
-<button onclick="mark('LOGIN')">Login</button><button onclick="mark('LOGOUT')">Logout</button><div id="msg"></div>
-</div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script><script src="config.js"></script><script>
-const sb=supabase.createClient(window.SUPABASE_URL,window.SUPABASE_KEY);let people=[];
-const qrUrl=new URL('attendance.html',location.href).href;new QRCode(document.getElementById('qrcode'),{text:qrUrl,width:240,height:240,correctLevel:QRCode.CorrectLevel.M});
-async function boot(){const {data,error}=await sb.from('people').select('id,name,employee_id').eq('active',true).order('id');if(error){return fail(error.message)}people=data||[];person.innerHTML='<option value="">Select employee name</option>'+people.map(p=>'<option value="'+p.id+'">'+esc(p.name)+'</option>').join('');}
-function updateId(){const p=people.find(x=>String(x.id)===person.value);employeeId.value=p?.employee_id||''}
-async function mark(action){const p=people.find(x=>String(x.id)===person.value);const loc=location.value.trim();if(!p)return fail('Please select your employee name.');if(!loc)return fail('Please enter your location.');const payload={person_id:p.id,employee_id:p.employee_id,employee_name:p.name,location:loc,action};const {error}=await sb.from('attendance').insert(payload);if(error)return fail(error.message);msg.innerHTML='<div class="ok"><b>'+esc(p.name)+'</b><br>Employee ID: <b>'+esc(p.employee_id)+'</b><br>Location: <b>'+esc(loc)+'</b><br>Attendance <b>'+action+'</b> recorded at '+new Date().toLocaleString()+'.</div>';}
-function fail(x){msg.innerHTML='<div class="error">'+esc(x)+'</div>'}function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}boot();
-</script></body></html>
+body{font-family:Arial,sans-serif;background:#f4f6f8;margin:0;padding:20px;color:#17202a}
+.card{max-width:520px;margin:auto;background:white;padding:24px;border-radius:16px;box-shadow:0 4px 18px #0001}
+h1{text-align:center;margin-top:0}.qr{display:flex;justify-content:center;margin:18px}
+label{display:block;font-weight:600;margin:14px 0 6px}
+input{box-sizing:border-box;width:100%;padding:12px;border:1px solid #bbb;border-radius:8px;font-size:16px}
+.buttons{display:flex;gap:12px;margin-top:18px}.buttons button{flex:1}
+button{padding:13px;border:0;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer}
+.login{background:#198754;color:white}.logout{background:#dc3545;color:white}
+#msg{margin-top:18px;padding:12px;border-radius:8px;display:none}
+.hint{text-align:center;color:#666;font-size:13px}
+.url{font-size:12px;word-break:break-all;text-align:center;color:#555}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>118 Attendance</h1>
+<p class="hint">Enter or edit your Name, Employee ID and Location, then select Login or Logout.</p>
+<div class="qr" id="qrcode"></div>
+<div class="url" id="pageUrl"></div>
+
+<label for="name">Employee Name</label>
+<input id="name" type="text" placeholder="Enter employee name" autocomplete="name">
+
+<label for="employeeId">Employee ID</label>
+<input id="employeeId" type="text" placeholder="Enter employee ID">
+
+<label for="location">Location</label>
+<input id="location" type="text" placeholder="Enter location, e.g. Office / Home">
+
+<div class="buttons">
+<button class="login" onclick="markAttendance('LOGIN')">Login</button>
+<button class="logout" onclick="markAttendance('LOGOUT')">Logout</button>
+</div>
+<div id="msg"></div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const pageUrl = new URL('./', location.href).href;
+document.getElementById('pageUrl').textContent = pageUrl;
+new QRCode(document.getElementById('qrcode'), {
+  text: pageUrl, width: 220, height: 220,
+  correctLevel: QRCode.CorrectLevel.M
+});
+
+function showMsg(text, ok=false){
+  const el=document.getElementById('msg');
+  el.style.display='block';
+  el.style.background=ok ? '#d1e7dd' : '#f8d7da';
+  el.style.color=ok ? '#0f5132' : '#842029';
+  el.textContent=text;
+}
+
+async function markAttendance(action){
+  const name=document.getElementById('name').value.trim();
+  const employeeId=document.getElementById('employeeId').value.trim();
+  const locationValue=document.getElementById('location').value.trim();
+
+  if(!name || !employeeId || !locationValue){
+    showMsg('Please enter Employee Name, Employee ID and Location.');
+    return;
+  }
+
+  const {error}=await client.from('qr_attendance').insert({
+    employee_name:name,
+    employee_id:employeeId,
+    location:locationValue,
+    action:action
+  });
+
+  if(error){
+    showMsg('Unable to save attendance: '+error.message);
+    return;
+  }
+
+  showMsg(`${action === 'LOGIN' ? 'Login' : 'Logout'} recorded for ${name} (${employeeId}) at ${locationValue}.`, true);
+}
+</script>
+</body>
+</html>
