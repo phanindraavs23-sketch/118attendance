@@ -21,9 +21,236 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .error{background:#fdecec;color:#b42318;padding:15px;border-radius:10px;margin-top:15px}
 .small{font-size:13px;color:#666}
 .hint{font-size:14px;color:#555;margin-top:5px}
+.gps-box{margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8f9fa;border:1px solid #e2e8f0;font-size:13px;color:#555}
+.gps-box.ok{background:#e8f7ed;border-color:#bbf7d0;color:#065f46}
+.gps-box.err{background:#fdecec;border-color:#fecaca;color:#b42318}
+.gps-retry{width:auto !important;display:inline-block;margin-top:6px !important;padding:8px 14px !important;font-size:13px !important;background:#334155 !important}
 </style>
+<style>
+/* ===== 118 Attendance Portal — unified premium UI ===== */
+:root{
+  --p-bg:#f4f7fb;
+  --p-surface:rgba(255,255,255,.92);
+  --p-ink:#122033;
+  --p-muted:#64748b;
+  --p-line:#e2e8f0;
+  --p-brand:#2563eb;
+  --p-brand2:#7c3aed;
+  --p-success:#059669;
+  --p-danger:#dc2626;
+  --p-shadow:0 18px 55px rgba(15,23,42,.09);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif !important;
+  background:
+    radial-gradient(circle at 8% -5%,rgba(59,130,246,.18),transparent 28%),
+    radial-gradient(circle at 96% 2%,rgba(124,58,237,.14),transparent 27%),
+    linear-gradient(180deg,#f8fbff 0%,var(--p-bg) 100%) !important;
+  color:var(--p-ink) !important;
+}
+.portal-nav{
+  position:sticky;top:0;z-index:1000;
+  width:100%;
+  display:flex;align-items:center;gap:12px;
+  padding:12px max(18px,calc((100% - 1240px)/2));
+  background:rgba(255,255,255,.82);
+  border-bottom:1px solid rgba(226,232,240,.9);
+  backdrop-filter:blur(18px);
+  box-shadow:0 8px 30px rgba(15,23,42,.05);
+}
+.portal-brand{
+  display:flex;align-items:center;gap:10px;
+  color:var(--p-ink);text-decoration:none;font-weight:850;
+  margin-right:10px;white-space:nowrap;
+}
+.portal-logo{
+  width:38px;height:38px;border-radius:12px;
+  display:grid;place-items:center;color:white;font-size:12px;font-weight:900;
+  background:linear-gradient(135deg,var(--p-brand),var(--p-brand2));
+  box-shadow:0 8px 20px rgba(37,99,235,.25);
+}
+.portal-links{
+  display:flex;align-items:center;gap:4px;overflow-x:auto;
+  scrollbar-width:none;flex:1;
+}
+.portal-links::-webkit-scrollbar{display:none}
+.portal-links a{
+  color:#475569;text-decoration:none;font-size:13px;font-weight:700;
+  padding:9px 11px;border-radius:10px;white-space:nowrap;
+  transition:.18s ease;
+}
+.portal-links a:hover{background:#eff6ff;color:var(--p-brand)}
+.portal-links a.active{background:#eef2ff;color:#4f46e5}
+.portal-secure{
+  font-size:11px;font-weight:800;color:#047857;
+  background:#ecfdf5;border:1px solid #bbf7d0;
+  border-radius:999px;padding:7px 10px;white-space:nowrap;
+}
+body > .wrap, body > .container{position:relative}
+.card{
+  border-color:rgba(226,232,240,.9) !important;
+  box-shadow:var(--p-shadow) !important;
+}
+input,select,textarea,.field{
+  transition:border-color .18s,box-shadow .18s,transform .18s;
+}
+input:focus,select:focus,textarea:focus,.field:focus{
+  border-color:#60a5fa !important;
+  box-shadow:0 0 0 4px rgba(59,130,246,.10) !important;
+  outline:none;
+}
+button{
+  transition:transform .18s,box-shadow .18s,opacity .18s !important;
+}
+button:not(:disabled):hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 18px rgba(15,23,42,.14);
+}
+table{border-collapse:separate !important;border-spacing:0 !important;overflow:hidden;border:1px solid var(--p-line);border-radius:14px}
+th{
+  background:linear-gradient(180deg,#f8fafc,#f1f5f9) !important;
+  color:#475569;font-size:12px;text-transform:uppercase;letter-spacing:.04em;
+}
+th,td{border-bottom:1px solid var(--p-line) !important}
+tr:last-child td{border-bottom:0 !important}
+.badge{font-weight:800}
+@media(max-width:760px){
+  .portal-nav{padding:10px 12px;gap:8px}
+  .portal-brand span:last-child{display:none}
+  .portal-secure{display:none}
+}
+
+/* Employee attendance experience */
+.wrap{max-width:720px !important;padding:38px 18px 60px !important}
+.card{border-radius:28px !important;overflow:hidden}
+.card > h1{
+  font-size:34px !important;letter-spacing:-.04em;
+  margin-top:0;
+}
+.qrbox{
+  background:linear-gradient(145deg,#eff6ff,#f5f3ff) !important;
+  border:1px solid #dbeafe !important;
+  border-radius:20px !important;
+}
+.qrbox h2{font-size:17px;letter-spacing:-.01em}
+.qrbox img{border-radius:12px;box-shadow:0 12px 30px rgba(15,23,42,.10)}
+.field,button{border-radius:13px !important}
+button{font-weight:800 !important;background:linear-gradient(135deg,var(--p-brand),#4f46e5) !important}
+button.logout{background:#334155 !important}
+.ok{background:#ecfdf5 !important;border:1px solid #bbf7d0 !important;color:#065f46}
+.error{background:#fef2f2 !important;border:1px solid #fecaca !important}
+</style>
+
+<style id="mobile-responsive-customization">
+/* Mobile-friendly 118 Attendance customization */
+*, *::before, *::after { box-sizing: border-box; }
+html { width: 100%; overflow-x: hidden; }
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+img, canvas, svg { max-width: 100%; height: auto; }
+button, input, select, textarea {
+  max-width: 100%;
+  font-size: 16px;
+}
+input, select, textarea {
+  min-height: 44px;
+}
+button {
+  min-height: 44px;
+  touch-action: manipulation;
+}
+table {
+  width: 100%;
+}
+@media (max-width: 768px) {
+  body {
+    margin: 0 !important;
+    padding: 12px !important;
+  }
+  .container, .wrap, .card, .panel, .shell, main {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .card, .panel {
+    padding: 14px !important;
+  }
+  h1 { font-size: 24px !important; line-height: 1.2 !important; }
+  h2 { font-size: 20px !important; }
+  h3 { font-size: 18px !important; }
+  p { line-height: 1.5; }
+  input, select, textarea {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  button {
+    width: 100%;
+    margin-top: 8px;
+  }
+  .row, .grid, .actions, .form-row, .toolbar {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+  .row > *, .grid > *, .actions > *, .form-row > *, .toolbar > * {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+  th, td {
+    padding: 8px !important;
+  }
+  #qrcode {
+    max-width: 100%;
+    overflow: hidden;
+  }
+}
+@media (max-width: 420px) {
+  body { padding: 8px !important; }
+  .card, .panel { padding: 11px !important; border-radius: 12px !important; }
+  h1 { font-size: 21px !important; }
+  .logo { max-width: 100%; }
+}
+</style>
+
 </head>
 <body>
+
+<nav class="portal-nav" aria-label="Main portal navigation">
+  <a class="portal-brand" href="portal.html" aria-label="118 Attendance home">
+    <span class="portal-logo">118</span><span>118 Attendance</span>
+  </a>
+  <div class="portal-links">
+    <a href="portal.html">Portal</a>
+    <a href="attendance.html">Attendance</a>
+    <a href="leave.html">Apply Leave</a>
+    <a href="leave-status.html">Leave Status</a>
+    <a href="manager.html">Manager</a>
+    <a href="hr.html">HR</a>
+  </div>
+  <span class="portal-secure">● Secure Portal</span>
+</nav>
+<script>
+(function(){
+  const page=(location.pathname.split('/').pop()||'portal.html').toLowerCase();
+  document.querySelectorAll('.portal-links a').forEach(a=>{
+    const target=a.getAttribute('href').toLowerCase();
+    if(target===page || (page==='index.html' && target==='portal.html')) a.classList.add('active');
+  });
+})();
+</script>
+
 <div class="wrap"><div class="card">
 <h1>Employee Attendance</h1>
 <p class="muted">Scan the QR code to open this form. Enter or verify your Name, Employee ID and Location, then choose Login or Logout.</p>
@@ -35,13 +262,18 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </div>
 
 <label class="label" for="employeeName">Employee Name</label>
-<input class="field" id="employeeName" placeholder="Enter employee name" autocomplete="name">
+<input class="field" id="employeeName" placeholder="Enter employee name (alphabets only)" autocomplete="name">
 
 <label class="label" for="employeeId">Employee ID</label>
-<input class="field" id="employeeId" placeholder="Enter Employee ID" autocomplete="off">
+<input class="field" id="employeeId" placeholder="Enter Employee ID (numbers only)" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
 
 <label class="label" for="employeeLocation">Location</label>
 <input class="field" id="employeeLocation" placeholder="Enter location (e.g. Office / Home)" autocomplete="off">
+
+<div id="gpsBox" class="gps-box">
+  <div id="gpsStatus" class="gps-status">📍 Detecting your GPS location…</div>
+  <button type="button" id="gpsRetryBtn" class="gps-retry" onclick="captureGps()" style="display:none">Retry GPS capture</button>
+</div>
 
 <button id="loginBtn" onclick="mark('LOGIN')">Login</button>
 <button id="logoutBtn" class="logout" onclick="mark('LOGOUT')">Logout</button>
@@ -58,6 +290,13 @@ const nameInput = document.getElementById('employeeName');
 const idInput = document.getElementById('employeeId');
 const locationInput = document.getElementById('employeeLocation');
 const msg = document.getElementById('msg');
+idInput.addEventListener('input', () => { idInput.value = idInput.value.replace(/\D/g, ''); });
+if (nameInput) {
+  nameInput.addEventListener('input', () => {
+    nameInput.value = nameInput.value.replace(/[^A-Za-z ]/g, '').replace(/\s{2,}/g, ' ');
+  });
+}
+
 
 const params = new URLSearchParams(window.location.search);
 const qrName = params.get('name') || '';
@@ -81,6 +320,48 @@ if (qrExpired) {
   setBusy(true);
 }
 
+// ---- GPS location capture ----
+let gpsCoords = null; // { lat, lng, accuracy }
+const gpsBox = document.getElementById('gpsBox');
+const gpsStatus = document.getElementById('gpsStatus');
+const gpsRetryBtn = document.getElementById('gpsRetryBtn');
+
+function setGpsUi(state, text) {
+  gpsBox.classList.remove('ok', 'err');
+  if (state) gpsBox.classList.add(state);
+  gpsStatus.textContent = text;
+  gpsRetryBtn.style.display = state === 'err' ? 'inline-block' : 'none';
+}
+
+function captureGps() {
+  if (!('geolocation' in navigator)) {
+    gpsCoords = null;
+    setGpsUi('err', '⚠️ GPS is not supported on this device/browser. You can still submit without it.');
+    return;
+  }
+  setGpsUi(null, '📍 Detecting your GPS location…');
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      gpsCoords = {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+        accuracy: pos.coords.accuracy
+      };
+      setGpsUi('ok', '📍 GPS captured: ' + gpsCoords.lat.toFixed(5) + ', ' + gpsCoords.lng.toFixed(5) +
+        ' (±' + Math.round(gpsCoords.accuracy) + 'm)');
+    },
+    (err) => {
+      gpsCoords = null;
+      let reason = 'Location unavailable.';
+      if (err.code === err.PERMISSION_DENIED) reason = 'Location permission denied.';
+      else if (err.code === err.TIMEOUT) reason = 'Location request timed out.';
+      setGpsUi('err', '⚠️ ' + reason + ' You can still submit, or tap retry after enabling location access.');
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+  );
+}
+captureGps();
+
 const qrTarget = new URL('attendance.html', window.location.href).href;
 function renderQr() {
   const qrEl = document.getElementById('qrcode');
@@ -99,7 +380,9 @@ async function mark(action) {
   const employeeLocation = locationInput.value.trim();
 
   if (!employeeName) return fail('Please enter your employee name.');
+  if (!/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(employeeName)) return fail('Employee Name must contain alphabets and spaces only.');
   if (!employeeId) return fail('Please enter your Employee ID.');
+  if (!/^\d+$/.test(employeeId)) return fail('Employee ID must contain numbers only.');
   if (!employeeLocation) return fail('Please enter your location.');
 
   setBusy(true);
@@ -110,7 +393,10 @@ async function mark(action) {
     employee_id: employeeId,
     employee_name: employeeName,
     location: employeeLocation,
-    action: action
+    action: action,
+    gps_lat: gpsCoords ? gpsCoords.lat : null,
+    gps_lng: gpsCoords ? gpsCoords.lng : null,
+    gps_accuracy: gpsCoords ? gpsCoords.accuracy : null
   });
 
   setBusy(false);
@@ -118,14 +404,21 @@ async function mark(action) {
     if ((error.message || '').toLowerCase().includes('session_token')) {
       return fail('Supabase still requires the old session_token column. Run supabase/fix_session_token.sql in Supabase SQL Editor, then try again.');
     }
+    if ((error.message || '').toLowerCase().includes('gps_lat') || (error.message || '').toLowerCase().includes('gps_lng') || (error.message || '').toLowerCase().includes('gps_accuracy')) {
+      return fail('Supabase needs the new GPS columns. Run supabase/add_gps_location.sql in Supabase SQL Editor, then try again.');
+    }
     return fail(error.message);
   }
+
+  const mapLink = gpsCoords
+    ? '<br><a href="https://www.google.com/maps?q=' + gpsCoords.lat + ',' + gpsCoords.lng + '" target="_blank" rel="noopener">View captured GPS location on map</a>'
+    : '<br><span class="small">GPS location was not captured for this entry.</span>';
 
   msg.innerHTML = '<div class="ok"><b>' + esc(employeeName) + '</b><br>' +
     'Employee ID: <b>' + esc(employeeId) + '</b><br>' +
     'Location: <b>' + esc(employeeLocation) + '</b><br>' +
     'Attendance <b>' + action + '</b> recorded successfully.<br>' +
-    '<span class="small">Date/time is saved automatically by the Supabase server.</span></div>';
+    mapLink + '</div>';
 }
 
 function setBusy(busy) {

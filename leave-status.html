@@ -1,15 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>118 Attendance — Employee Portal</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>118 Attendance — Leave Status</title>
 <style>
-:root{--bg:#f4f7fb;--card:#fff;--ink:#132238;--muted:#64748b;--line:#e6ebf2;--brand:#2563eb;--brand2:#7c3aed;--green:#059669}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at 15% 0%,#dbeafe 0,transparent 34%),radial-gradient(circle at 90% 10%,#ede9fe 0,transparent 30%),var(--bg);min-height:100vh}
-.container{max-width:1120px;margin:auto;padding:34px 22px 50px}.top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:44px}.brand{display:flex;align-items:center;gap:13px}.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 12px 28px #2563eb33}.brand h1{margin:0;font-size:20px}.brand p{margin:2px 0 0;color:var(--muted);font-size:13px}.pill{padding:9px 13px;border:1px solid var(--line);background:#ffffffb8;border-radius:999px;color:#475569;font-size:13px}
-.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;margin-bottom:24px}.hero-main,.hero-side{background:#ffffffd9;border:1px solid #fff;border-radius:28px;box-shadow:0 22px 60px #1e293b14;backdrop-filter:blur(10px)}.hero-main{padding:38px}.eyebrow{color:var(--brand);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase}.hero h2{font-size:clamp(32px,5vw,54px);line-height:1.02;letter-spacing:-.045em;margin:12px 0 15px}.hero h2 span{background:linear-gradient(90deg,var(--brand),var(--brand2));-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);line-height:1.7;max-width:650px;margin:0 0 25px}.cta{display:inline-flex;align-items:center;gap:9px;padding:13px 17px;border-radius:13px;background:var(--brand);color:#fff;text-decoration:none;font-weight:700;box-shadow:0 12px 24px #2563eb33}.hero-side{padding:28px;display:flex;flex-direction:column;justify-content:space-between}.status{padding:15px;border-radius:16px;background:#ecfdf5;border:1px solid #a7f3d0}.status b{color:#047857}.mini{color:var(--muted);font-size:13px;line-height:1.6}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;text-decoration:none;color:inherit;box-shadow:0 12px 35px #1e293b0b;transition:.2s}.card:hover{transform:translateY(-4px);box-shadow:0 18px 42px #1e293b18}.icon{width:44px;height:44px;border-radius:13px;background:#eff6ff;color:var(--brand);display:grid;place-items:center;font-size:21px;margin-bottom:17px}.card:nth-child(2) .icon{background:#f5f3ff;color:#7c3aed}.card:nth-child(3) .icon{background:#ecfdf5;color:#059669}.card h3{margin:0 0 7px;font-size:18px}.card p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}.arrow{float:right;color:#94a3b8;font-size:22px}.admin{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:18px}.admin .card:nth-child(1) .icon{background:#fff7ed;color:#ea580c}.admin .card:nth-child(2) .icon{background:#fdf2f8;color:#db2777}footer{text-align:center;color:#94a3b8;font-size:12px;margin-top:34px}
-@media(max-width:760px){.hero{grid-template-columns:1fr}.cards,.admin{grid-template-columns:1fr}.top{align-items:flex-start}.hero-main{padding:27px}.container{padding-top:22px}}
+:root{--bg:#f5f7fb;--ink:#172033;--muted:#64748b;--line:#e2e8f0;--blue:#2563eb;--purple:#7c3aed}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at 10% 0%,#dbeafe,transparent 32%),radial-gradient(circle at 100% 0%,#ede9fe,transparent 30%),var(--bg);color:var(--ink)}.wrap{max-width:900px;margin:0 auto;padding:30px 18px 50px}.back{display:inline-flex;text-decoration:none;color:#475569;font-size:14px;margin-bottom:20px}.card{background:#fff;border:1px solid #fff;border-radius:26px;box-shadow:0 24px 70px #1e293b14;overflow:hidden}.head{padding:32px;background:linear-gradient(135deg,#eff6ff,#f5f3ff)}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;display:grid;place-items:center;font-weight:800;margin-bottom:20px}.head h1{margin:0 0 8px;font-size:30px}.head p{margin:0;color:var(--muted);line-height:1.6}.form{padding:28px}.label{display:block;margin:0 0 7px;font-size:13px;font-weight:800;color:#334155}.row{display:grid;grid-template-columns:1fr 180px;gap:12px}.field,button{width:100%;font:inherit;padding:14px;border-radius:12px}.field{border:1px solid #cbd5e1;outline:none}.field:focus{border-color:#60a5fa;box-shadow:0 0 0 4px #3b82f61a}.btn{border:0;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;font-weight:800;cursor:pointer}.btn:disabled{opacity:.55}.msg{margin-top:16px}.error,.empty{padding:14px;border-radius:13px}.error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}.empty{background:#f8fafc;color:#475569}.table-wrap{overflow:auto;margin-top:20px}.table{width:100%;border-collapse:collapse;min-width:700px}.table th,.table td{padding:13px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;vertical-align:top}.table th{color:#475569;background:#f8fafc}.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-weight:800;font-size:11px}.pending{background:#fff7ed;color:#9a3412}.approved{background:#ecfdf5;color:#047857}.rejected{background:#fef2f2;color:#b91c1c}.small{font-size:12px;color:#64748b}@media(max-width:650px){.row{grid-template-columns:1fr}.head,.form{padding:23px}}
 </style>
 <style>
 /* ===== 118 Attendance Portal — unified premium UI ===== */
@@ -105,8 +101,23 @@ tr:last-child td{border-bottom:0 !important}
   .portal-brand span:last-child{display:none}
   .portal-secure{display:none}
 }
+
+/* Leave forms */
+.wrap{padding-top:34px !important}
+.card{border-radius:28px !important}
+.head{
+  background:
+    radial-gradient(circle at 100% 0%,rgba(124,58,237,.12),transparent 35%),
+    linear-gradient(135deg,#eff6ff,#f5f3ff) !important;
+}
+.head h1{letter-spacing:-.04em !important}
+.logo{box-shadow:0 10px 25px rgba(37,99,235,.22)}
+.btn,.form button{
+  background:linear-gradient(135deg,var(--p-brand),#4f46e5) !important;
+  font-weight:800 !important;border:0 !important;
+}
+.ok{border:1px solid #bbf7d0 !important}
 </style>
-<script src="portal-roles.js"></script>
 
 <style id="mobile-responsive-customization">
 /* Mobile-friendly 118 Attendance customization */
@@ -216,38 +227,14 @@ table {
   });
 })();
 </script>
-
-<div class="container">
-  <div class="top">
-    <div class="brand"><div class="logo">118</div><div><h1>118 Attendance</h1><p>Employee attendance & leave management</p></div></div>
-    <div class="pill">Secure employee portal</div>
-  </div>
-
-  <section class="hero">
-    <div class="hero-main">
-      <div class="eyebrow">Employee Portal</div>
-      <h2>Simple attendance.<br><span>Smarter leave management.</span></h2>
-      <p>Mark your daily attendance with the QR code, submit leave requests, and check your leave status using your Employee ID.</p>
-      <a class="cta" href="attendance.html">Open Attendance <span>→</span></a>
-    </div>
-    <div class="hero-side">
-      <div class="status"><b>● System ready</b><div class="mini">QR attendance and leave requests are available.</div></div>
-      <div class="mini"><strong>Tip:</strong> Keep your Employee ID ready. It is used to submit leave and check your approval status.</div>
-    </div>
-  </section>
-
-  <section class="cards">
-    <a class="card" href="attendance.html"><div class="icon">✓</div><span class="arrow">↗</span><h3>Attendance</h3><p>Log in or log out using the daily QR attendance form.</p></a>
-    <a class="card" href="leave.html"><div class="icon">📅</div><span class="arrow">↗</span><h3>Apply for Leave</h3><p>Submit dates and reason using Employee ID. No email required.</p></a>
-    <a class="card" href="leave-status.html"><div class="icon">🔎</div><span class="arrow">↗</span><h3>Leave Status</h3><p>Login with your Employee ID to check pending, approved or rejected leave.</p></a>
-  </section>
-
-  <section class="admin">
-    <a class="card" href="hr.html"><div class="icon">HR</div><span class="arrow">↗</span><h3>HR Dashboard</h3><p>Attendance records, leave reports and CSV export.</p></a>
-    <a class="card" href="manager.html"><div class="icon">M</div><span class="arrow">↗</span><h3>Manager Dashboard</h3><p>Team attendance plus approve or reject leave requests.</p></a>
-  </section>
-
-  <footer>118 Employee Attendance Portal • GitHub Pages + Supabase</footer>
-</div>
-</body>
-</html>
+<div class="wrap">
+<a class="back" href="portal.html">← Back to portal</a>
+<div class="card">
+<div class="head"><div class="logo">118</div><h1>Leave Status</h1><p>Login with your Employee ID to view your leave requests and see whether each request is pending, approved, or rejected.</p></div>
+<div class="form">
+<label class="label" for="employeeId">Employee ID</label>
+<div class="row"><input class="field" id="employeeId" placeholder="Employee ID (numbers only), e.g. 1001" autocomplete="off" inputmode="numeric" pattern="[0-9]*"><button class="btn" id="checkBtn" onclick="checkStatus()">Check Leave Status</button></div>
+<div id="msg" class="msg"></div><div id="results"></div>
+</div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
+<script src="leave-status.js"></script></body></html>

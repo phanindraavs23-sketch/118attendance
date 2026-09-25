@@ -46,3 +46,12 @@ The export uses the currently displayed filters (search, action, from date, to d
 CSV columns:
 Employee Name, Employee ID, Location, Action, Login / Logout Time
 The file downloads directly in the browser and does not require a server.
+
+
+EMAIL NOTIFICATIONS:
+See EMAIL_SETUP.txt. Leave requests now collect employee_email and the Manager approve/reject action invokes the secure send-leave-decision-email Supabase Edge Function.
+
+
+VISUAL REFRESH
+--------------
+All portal pages now share a responsive premium navigation, glass-style cards, consistent typography, buttons, forms, tables, mobile behavior, and active-page navigation. Existing Supabase/attendance/leave JavaScript was preserved.
