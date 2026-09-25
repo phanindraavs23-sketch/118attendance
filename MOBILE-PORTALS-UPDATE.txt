@@ -1,0 +1,14 @@
+118 Attendance — HR & Manager Mobile Web Update
+
+Updated:
+- HR portal pages: responsive mobile layout
+- Manager portal pages: responsive mobile layout
+- Dashboard cards stack vertically on phones
+- Navigation becomes mobile-friendly
+- Forms/buttons use touch-friendly sizing
+- Attendance/data tables scroll horizontally instead of overflowing
+- Charts/maps/iframes are constrained to the viewport
+- Mobile viewport metadata is included
+
+No Supabase/database configuration was changed.
+No attendance/business logic was intentionally changed.
