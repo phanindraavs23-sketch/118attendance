@@ -19,6 +19,21 @@ table{width:100%;border-collapse:collapse;margin-top:14px} th,td{padding:11px;bo
 .loginb{background:#e8f7ed} .logoutb{background:#eee} .small{color:#666;font-size:13px}
 @media(max-width:800px){.grid,.controls{grid-template-columns:1fr 1fr}table{font-size:13px;display:block;overflow:auto;white-space:nowrap}}
 
+/* Mobile card view for leave requests + attendance records tables */
+@media(max-width:800px){
+  table.data-table{display:block;overflow:visible;white-space:normal;border:0;margin-top:12px}
+  table.data-table thead{display:none}
+  table.data-table tbody{display:block}
+  table.data-table tr{display:block;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:6px 14px;margin-bottom:12px;box-shadow:0 4px 14px rgba(15,23,42,.06)}
+  table.data-table td{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px dashed #eef1f5;text-align:right;white-space:normal;word-break:break-word}
+  table.data-table tr td:last-child{border-bottom:0}
+  table.data-table td::before{content:attr(data-label);font-weight:700;color:#64748b;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.03em;flex-shrink:0;margin-right:10px}
+  table.data-table td:not([data-label])::before,
+  table.data-table td[data-label=""]::before{display:none;content:none}
+  table.data-table td:not([data-label]){text-align:center;padding:14px 0}
+  table.data-table .leave-actions{justify-content:flex-end}
+}
+
 .calendar-card{margin-top:18px}
 .calendar-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
 .calendar-title{font-size:20px;font-weight:700}
@@ -488,7 +503,7 @@ table {
 <button class="leave-tab" data-status="PENDING" onclick="setLeaveTab('PENDING')">Pending</button>
 </div>
 <div id="leaveMsg" class="small" style="margin-bottom:8px"></div>
-<table>
+<table class="data-table">
 <thead><tr><th>Name</th><th>Employee ID</th><th>Dates</th><th>Reason</th><th>Status</th><th>Requested</th><th>Decided by</th></tr></thead>
 <tbody id="leaveRows"></tbody>
 </table>
@@ -502,7 +517,7 @@ table {
 <button class="exportBtn" onclick="exportCSV()">Export CSV</button><button onclick="loadData()">Refresh</button>
 </div>
 <div id="tableMsg" class="small" style="margin-top:12px"></div>
-<table>
+<table class="data-table">
 <thead><tr><th>Name</th><th>Employee ID</th><th>Location</th><th>GPS</th><th>Action</th><th>Login / Logout Time</th></tr></thead>
 <tbody id="rows"></tbody>
 </table>
@@ -587,9 +602,9 @@ function render() {
   document.getElementById('employees').textContent =
     new Set(allRows.filter(r => (r.recorded_at || '').slice(0, 10) === today).map(r => r.employee_id)).size;
   document.getElementById('rows').innerHTML =
-    rows.map(r => `<tr><td>${esc(r.employee_name)}</td><td>${esc(r.employee_id)}</td>
-    <td>${esc(r.location)}</td><td>${gpsLink(r.gps_lat, r.gps_lng)}</td><td><span class="badge ${r.action === 'LOGIN' ? 'loginb' : 'logoutb'}">${r.action}</span></td>
-    <td>${formatTime(r.recorded_at)}</td></tr>`).join('') ||
+    rows.map(r => `<tr><td data-label="Name">${esc(r.employee_name)}</td><td data-label="Employee ID">${esc(r.employee_id)}</td>
+    <td data-label="Location">${esc(r.location)}</td><td data-label="GPS">${gpsLink(r.gps_lat, r.gps_lng)}</td><td data-label="Action"><span class="badge ${r.action === 'LOGIN' ? 'loginb' : 'logoutb'}">${r.action}</span></td>
+    <td data-label="Login / Logout Time">${formatTime(r.recorded_at)}</td></tr>`).join('') ||
     '<tr><td colspan="6">No records found.</td></tr>';
   document.getElementById('tableMsg').textContent = rows.length + ' record(s)';
 }
@@ -689,12 +704,12 @@ function renderLeaveRequests() {
 
   document.getElementById('leaveRows').innerHTML = rows.map(r => {
     const badgeClass = r.status === 'APPROVED' ? 'approvedb' : r.status === 'REJECTED' ? 'rejectedb' : 'pendingb';
-    return '<tr><td>' + esc(r.employee_name) + '</td><td>' + esc(r.employee_id) + '</td>' +
-      '<td>' + esc(r.start_date) + ' to ' + esc(r.end_date) + '</td>' +
-      '<td>' + esc(r.reason) + '</td>' +
-      '<td><span class="badge ' + badgeClass + '">' + r.status + '</span></td>' +
-      '<td>' + formatTime(r.requested_at) + '</td>' +
-      '<td class="small">' + (r.decided_by ? esc(r.decided_by) : '—') + '</td></tr>';
+    return '<tr><td data-label="Name">' + esc(r.employee_name) + '</td><td data-label="Employee ID">' + esc(r.employee_id) + '</td>' +
+      '<td data-label="Dates">' + esc(r.start_date) + ' to ' + esc(r.end_date) + '</td>' +
+      '<td data-label="Reason">' + esc(r.reason) + '</td>' +
+      '<td data-label="Status"><span class="badge ' + badgeClass + '">' + r.status + '</span></td>' +
+      '<td data-label="Requested">' + formatTime(r.requested_at) + '</td>' +
+      '<td data-label="Decided by" class="small">' + (r.decided_by ? esc(r.decided_by) : '—') + '</td></tr>';
   }).join('') || '<tr><td colspan="7">No leave requests found.</td></tr>';
 
   document.getElementById('leaveMsg').textContent = rows.length + ' request(s)';
